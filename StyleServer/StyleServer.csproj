@@ -41,9 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessageHandler.cs" />
     <Compile Include="ServerMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerSocket.cs" />
+    <Compile Include="StyleCharacter.cs" />
+    <Compile Include="StyleCharacterDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

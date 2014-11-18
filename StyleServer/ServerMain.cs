@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 
 using System.Net.Sockets;
+using System.Net;
 using StyleServer;
 
 
@@ -24,9 +25,17 @@ namespace StyleServer
             Thread listenThread = new Thread(ssock.StartListening); //Start Listening on  a new thread 
             listenThread.Start(); 
             
+
+            //Test Socket for debug
+            byte[] bytesend = new byte[256];
+            Socket sendsock = new Socket(soctype, protype); //test send socket
+            IPAddress hostIP = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork); //Get our IP
+            IPEndPoint ep = new IPEndPoint(hostIP, 50053); //create our end point
             for(;true;)
             {
-                Console.WriteLine("Hello!");
+                String str = Console.In.ReadLine();
+                bytesend = Encoding.ASCII.GetBytes(str);
+                sendsock.SendTo(bytesend,ep);
                 System.Threading.Thread.Sleep(500);
             }
         }

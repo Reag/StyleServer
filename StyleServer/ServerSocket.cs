@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
+using System.Threading;
 
 namespace StyleServer
 {
@@ -29,52 +30,68 @@ namespace StyleServer
             System.Console.WriteLine(e.ToString());
             System.Console.In.Read();
         }
+
         public void StartListening()
         {
 
+        Socket listensocket = new Socket(soctype, protype); //Create Socket
+
+        IPAddress hostIP = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork); //Get our IP
+        IPEndPoint ep = new IPEndPoint(hostIP, 50053); //create our end point
+        System.Console.WriteLine("Creating a "+ protype.ToString() +" socket for " + hostIP + " on port 50053.");  //display IP
+        listensocket.Bind(ep);  //Bind
+
+        byte[] bytes = new byte[256];
+        bool inBuffer;
+
+        for (; true; )    //Main Network Listen Loop
+        {
+            inBuffer = true;
             try
             {
-
-                Socket listensocket = new Socket(soctype, protype); //Create Socket
-
-                IPAddress hostIP = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork); //Get our IP
-                IPEndPoint ep = new IPEndPoint(hostIP, 50053); //create our end point
-                System.Console.WriteLine("Creating a "+ protype.ToString() +" socket for " + hostIP + " on port 50053.");  //display IP
-                listensocket.Bind(ep);  //Bind
-
-
-                //     byte[] bytesend = new byte[256];
-                //     System.Buffer.BlockCopy("Test".ToCharArray(), 0, bytesend, 0, "Test".Length);
-                //    Socket sendsock = new Socket(soctype, protype); //test send socket
-
-
-                byte[] bytes = new byte[256];
-
-
-
-                for (; true; )
-                {
-                    listensocket.Receive(bytes);  //recive
-                    if(isValidMessage(bytes))     //Check contents
-                    {
-                        Console.WriteLine(Encoding.UTF8.GetString(bytes));
-                    }   
-                    bytes = new byte[256];        //Clear message
-                }
+                listensocket.Receive(bytes);  //recive
             }
             catch (Exception e)
             {
-                printError(e);
+                System.Console.WriteLine(e.ToString());
+                inBuffer = false;
             }
+            if(inBuffer && isValidMessage(bytes))     //Check contents
+            {
+                System.Console.WriteLine("Valid Message containing: " + Encoding.UTF8.GetString(bytes, 0, bytes.Length));
+                handleMessage(bytes);
+            }   
+            bytes = new byte[256];        //Clear message
+        }
+     
 
-            System.Console.WriteLine("Press to Advance!");
-            System.Console.In.Read();
+        System.Console.WriteLine("Press to Advance!");
+        System.Console.In.Read();
         }
 
 
         public bool isValidMessage(byte[] bytes)
         {
-            return true;
+            String message = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+            if(true)
+                return true;
+           // System.Console.WriteLine("Invalid Message " + message);
+            //return false;
+        }
+
+        public bool handleMessage(byte[] bytes) //handles the message, creates a thread, and returns true if no errors occur
+        {
+            try //attempt to make a new thread
+            {
+                MessageHandler msgh = new MessageHandler(bytes);
+                Thread messageHandle = new Thread(msgh.Start); //Start Listening on  a new thread 
+                messageHandle.Start(); //begin browsing the message
+            } catch (Exception e)  //if we fail to create the thread, we do this:
+            {
+                System.Console.WriteLine(e.ToString());
+            }
+
+            return false;
         }
 
     }
