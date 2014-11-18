@@ -39,8 +39,7 @@ namespace StyleServer
 
                 IPAddress hostIP = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork); //Get our IP
                 IPEndPoint ep = new IPEndPoint(hostIP, 50053); //create our end point
-                System.Console.WriteLine(hostIP);  //display IP
-                //  System.Console.In.Read();  //Hold for input
+                System.Console.WriteLine("Creating a "+ protype.ToString() +" socket for " + hostIP + " on port 50053.");  //display IP
                 listensocket.Bind(ep);  //Bind
 
 
@@ -55,10 +54,12 @@ namespace StyleServer
 
                 for (; true; )
                 {
-                    // sendsock.SendTo(bytesend, ep);
                     listensocket.Receive(bytes);  //recive
-                    Console.WriteLine(Encoding.UTF8.GetString(bytes));
-                    bytes = new byte[256];
+                    if(isValidMessage(bytes))     //Check contents
+                    {
+                        Console.WriteLine(Encoding.UTF8.GetString(bytes));
+                    }   
+                    bytes = new byte[256];        //Clear message
                 }
             }
             catch (Exception e)
@@ -69,5 +70,12 @@ namespace StyleServer
             System.Console.WriteLine("Press to Advance!");
             System.Console.In.Read();
         }
+
+
+        public bool isValidMessage(byte[] bytes)
+        {
+            return true;
+        }
+
     }
 }
