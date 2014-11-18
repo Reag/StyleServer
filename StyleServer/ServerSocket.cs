@@ -75,8 +75,6 @@ namespace StyleServer
             String message = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
             if(true)
                 return true;
-           // System.Console.WriteLine("Invalid Message " + message);
-            //return false;
         }
 
         public bool handleMessage(byte[] bytes) //handles the message, creates a thread, and returns true if no errors occur
