@@ -1,0 +1,6 @@
+c:\users\dgco\documents\visual studio 2013\Projects\StyleServer\StyleServer\bin\Debug\StyleServer.exe.config
+c:\users\dgco\documents\visual studio 2013\Projects\StyleServer\StyleServer\bin\Debug\StyleServer.exe
+c:\users\dgco\documents\visual studio 2013\Projects\StyleServer\StyleServer\bin\Debug\StyleServer.pdb
+c:\users\dgco\documents\visual studio 2013\Projects\StyleServer\StyleServer\obj\Debug\StyleServer.csprojResolveAssemblyReference.cache
+c:\users\dgco\documents\visual studio 2013\Projects\StyleServer\StyleServer\obj\Debug\StyleServer.exe
+c:\users\dgco\documents\visual studio 2013\Projects\StyleServer\StyleServer\obj\Debug\StyleServer.pdb
